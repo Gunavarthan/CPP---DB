@@ -1,10 +1,10 @@
 #include<iostream>
+#include <sstream>
 #include<fstream>
 #include<string>
 #include<vector>
-#include<cstdlib> // for system("cls")
+#include<cstdlib> 
 using namespace std;
-// Define classes and functions...
 
 class date
 {
@@ -13,10 +13,48 @@ private:
 	int day;
 	int month;
 	int year;
+
+	bool validDate(int d, int m, int y) {
+		if (m < 1 || m > 12)
+			return false;
+		if (d < 1 || d > 31)
+			return false;
+		if ((m == 4 || m == 6 || m == 9 || m == 11) && d > 30)
+			return false;
+		if (m == 2) {
+			if (is_leap_year(y))
+				return d <= 29;
+			else
+				return d <= 28;
+		}
+		return true;
+	}
+
+	bool is_leap_year(int y)
+	{
+		return (y % 4 == 0 && (y % 100 != 0 || y % 400 == 0));
+	}
 public:
 	void get_date()
 	{
-		cout << "Enter the date (dd/mm/yyyy):"; cin >> day >> slash >> month >> slash >> year;
+		string input;
+		cout << "Enter the date (dd/mm/yyyy):";
+		cin >> input;
+		stringstream ss(input);
+		try
+		{
+			ss >> day >> slash >> month >> slash >> year;
+			if (ss.fail() || slash != '/' || !validDate(day, month, year))
+			{
+				throw invalid_argument("\nINVALID INPUT: Invalid date Format or value");
+			}
+		}
+		catch (invalid_argument& e)
+		{
+			cout << e.what() << endl;
+			get_date();
+		}
+
 	}
 	void disp_date()
 	{
@@ -45,10 +83,11 @@ public:
 	virtual void get(int a)
 	{
 		d.get_date();
-		cout << "Enter the Device Name:"; cin >> name;
-		cout << "Enter thw Computing Unit:"; cin >> CPU;
-		cout << "Enter the Graphic Unit:"; cin >> GPU;
-		cout << "Enter the Memory Module:"; cin >> Memory;
+		cin.ignore();
+		cout << "Enter the Device Name:"; getline(cin, name);
+		cout << "Enter the Computing Unit:"; getline(cin,CPU);
+		cout << "Enter the Graphic Unit:"; getline(cin,GPU);
+		cout << "Enter the Memory Module:"; getline(cin,Memory);
 	}
 	virtual string toCSV()
 	{
@@ -70,10 +109,10 @@ public:
 		Device = a;
 		cout << "Enter the GeekBench Score:"; cin >> geekbench;
 		cout << "Enter the 3D Mark Score:"; cin >> DMark;
-		cout << "Enter the Speed of RAM:"; cin >> mspeed;
-		cout << "Enter the Baterry Capacity:"; cin >> battery;
-		cout << "Enter the RAM Capacity:"; cin >> ram;
-		cout << "Enter the Storage Capacity:"; cin >> storage;
+		cout << "Enter the Speed of RAM(MHz):"; cin >> mspeed;
+		cout << "Enter the Baterry Capacity(mAh):"; cin >> battery;
+		cout << "Enter the RAM Capacity(Gb):"; cin >> ram;
+		cout << "Enter the Storage Capacity(Gb):"; cin >> storage;
 	}
 
 	string toCSV()
@@ -97,9 +136,9 @@ public:
 		cout << "Enter the CeneBench Score:"; cin >> cenebench;
 		cout << "Enter the 3D Mark Score:"; cin >> DMark;
 		cout << "Enter the Crystal disc Mark score:"; cin >> crystalDiscMark;
-		cout << "Enter the Speed of RAM:"; cin >> mspeed;
-		cout << "Enter the RAM Capacity:"; cin >> ram;
-		cout << "Enter the Storage Capacity:"; cin >> storage;
+		cout << "Enter the Speed of RAM(MHz):"; cin >> mspeed;
+		cout << "Enter the RAM Capacity(Gb):"; cin >> ram;
+		cout << "Enter the Storage Capacity(Gb):"; cin >> storage;
 	}
 
 	string toCSV()
@@ -116,7 +155,7 @@ private:
 public:
 	void get(int a) override {
 		PC::get(a);
-		cout << "Enter the Battery Capacity:"; cin >> battery;
+		cout << "Enter the Battery Capacity:(Wh)"; cin >> battery;
 	}
 
 	string toCSV() override {
@@ -163,13 +202,22 @@ void clearScreen() {
 }
 
 void printMenu() {
-	cout << "\nOPERATIONS AVAILABLE\n============\n";
+	cout << "\nOPERATIONS AVAILABLE\n====================\n";
 	cout << "1. Enter new Record\n";
 	cout << "2. Search record\n";
 	cout << "3. Number of records\n";
 	cout << "4. Display whole table\n";
 	cout << "5. EXIT\n";
 	cout << "CHOOSE OPERATION:";
+}
+
+void wHeader(ofstream& file)
+{
+	file.seekp(0, ios::end);
+	if (file.tellp() == 0)
+	{
+		file << "Date,Name,CPU,GPU,MemoryModule,GeekBench,3DMark,CineBench,CrystalDiskMark,MemorySpeed(MHz),Battery(Wh/mAh),Storage(GiB),RAM(Gb)\n";
+	}
 }
 
 int main() {
@@ -214,10 +262,11 @@ int main() {
 
 			ofstream fcin("data.csv", ios::app);
 			if (!fcin) {
-				cout << "FILE ERROR";
+				cout << "FILE ERROR: File Might be OPEN";
 				exit(0);
 			}
 
+			wHeader(fcin);
 			s1->get(choice);
 			fcin << s1->toCSV();
 			fcin.close();
@@ -285,3 +334,4 @@ int main() {
 
 	return 0;
 }
+/* -> Guna*/
