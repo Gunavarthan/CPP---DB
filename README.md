@@ -7,8 +7,7 @@ This project is a command-line interface (CLI) tool to maintain records in a CSV
 - C++ compiler (e.g., g++)
 - Standard C++ libraries
 
-
-##CSV Format:
+## CSV Format
 
 The CSV file (data.csv) should follow this format:
 day, name, CPU, GPU, MEMORY, geekbench, DMark, cenebench, crystalDiskMark, mspeed, battery, storage, RAM
@@ -20,7 +19,7 @@ Example row:
 
 The latest release of this project can be found [here](https://github.com/Gunavarthan/CPP---DB/releases/latest).
 
-##Notes:
+## Notes
 
 - This program creates and operates on the data.csv file in the same directory.
 - Open data.csv with Excel or any CSV viewer to analyze benchmarking data visually.
