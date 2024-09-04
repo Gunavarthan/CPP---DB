@@ -1,4 +1,4 @@
-# C++ DB- Device Benchmarking Record Management
+# 🖥️ C++ DB- Device Benchmarking Record Management
 
 This project is a command-line interface (CLI) tool to maintain records in a CSV file. It allows you to add, update, modify, and remove records used for benchmarking multiple devices such as mobile phones, laptops, and PCs. This project is implemented solely using C++ and its file handling capabilities.
 
@@ -19,7 +19,7 @@ Example row:
 
 The latest release of this project can be found [here](https://github.com/Gunavarthan/CPP---DB/releases/latest).
 
-## Notes
+## 🗒️ Notes
 
 - This program creates and operates on the data.csv file in the same directory.
 - Open data.csv with Excel or any CSV viewer to analyze benchmarking data visually.
